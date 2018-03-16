@@ -24,12 +24,11 @@ $("#submit").on("click", function() {
 
   if (playerNumber === 1) {
     $("#playerNameDiv").html("Hi"+playerName+"! You are Player"+playerNumber)
-    database.ref('/players').set( {
-      "test": {
+    database.ref('/players/player1').set( {
         losses: losses1,  
         playerName: playerName,
         wins: wins1,
-      }
+     
     });
     
     console.log(playerNumber);
@@ -38,12 +37,11 @@ $("#submit").on("click", function() {
      
 } else {
   $("#playerNameDiv").html("Hi"+playerName+"! You are Player"+playerNumber)
-  database.ref('/players').push( {
-    "test2": {
+  database.ref('/players/player2').set( {
       losses: losses1,  
       playerName: playerName,
       wins: wins1,
-    }
+   
   });
   
 }
@@ -52,17 +50,20 @@ $("#submit").on("click", function() {
 
 
 
-//Event Listener for when chid added
-database.ref('/players').on("value", function(snapshot) {
-  console.log (snapshot.val().test.playerName);
-  
-  $("#player1").html("Player 1:"+snapshot.val().test.playerName)
-  if (playerNumber === 1) {playerNumber++; }
-  else {playerNumber = 1;}
-
-  //Change text on page, if texton page == xx, then do "player 2"
+//Event Listener for when value updated
+database.ref('/players/player1').on("value", function(snapshot) {
+  console.log (snapshot.val().playerName);
+  $("#player1").html("Player 1:"+snapshot.val().playerName)
+  playerNumber++;
 });
+   
+database.ref('/players/player2').on("value", function(snapshot) {
+    console.log (snapshot.val().playerName);
+    $("#player2").html("Player 2:"+snapshot.val().playerName)
+    playerNumber = 1;
+  });
 
+//   //Change text on page, if texton page == xx, then do "player 2"
 
 
   //reset game
